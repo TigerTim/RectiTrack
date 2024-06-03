@@ -1,0 +1,21 @@
+p {
+    color: red;
+    font-size: 10px;
+    font-family: Arial, sans-serif;
+    /* border: 1px solid black; */
+    padding: 1em;
+}
+
+#special {
+    color: blue;
+
+}
+
+.portfolio {
+    border: 2px solid green;
+}
+
+img {
+    width: 100px;
+    
+}
