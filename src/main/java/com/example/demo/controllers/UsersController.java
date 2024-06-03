@@ -81,5 +81,5 @@ public class UsersController {
         // dont have to return "users/addedUser" as in video b/c there is no "users" folder 
     }
     
-    // data on DB will remain unchanged and are not deleted eventho I shut down my application
+    // data on DB will persist even when I do many pushes or restart the application
 }
