@@ -55,6 +55,7 @@ public class UsersController {
     }
 
     // For backend 
+    // Data coming from the form would be a PostMapping
     @PostMapping("/users/add")       // endpoint
     public String addUser(@RequestParam Map<String, String> newuser, HttpServletResponse response) {    
         // "HttpServletResponse" will help me w/ the response that Im going to give in my server
