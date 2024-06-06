@@ -54,7 +54,7 @@ public class UsersController {
         return "showAll";
     }
 
-    // For backend 
+    // For backend server
     // Data coming from the form would be a PostMapping
     @PostMapping("/users/add")       // endpoint
     public String addUser(@RequestParam Map<String, String> newuser, HttpServletResponse response) {    
