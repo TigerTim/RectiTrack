@@ -11,7 +11,9 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     // => In bracket, "User" class and second parameter is "id" type (which is of type "int")
     // Now, for ex, If write a code to enter new user to database (DB) => repository will automatically translate that code into SQL to send it over DB
     
-    List<User> findBySize(int size);    // "findBy" is a standard method and the other phrase would be what I look for ("Size" in this case) 
-    List<User> findByNameAndPassword(String name, String password);     // notice the camel case
+    // List<User> findByNameAndColor(String name, String color);    // "findBy" is a standard method and the other phrase would be what I look for
+    // List<User> findByWidthAndHeight(int width, int height);     // notice the camel case
+    List<User> findByNameAndColor(String name, String color);
+    List<User> findByWidthAndHeight(int width, int height);
     // Note: the parameters' name must match the variable in "User" class in User.java file
 }

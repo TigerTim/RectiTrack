@@ -18,15 +18,9 @@
                         <!-- th:each is similar to a for each loop -->
                         <!-- this is like for each user in "us" database-->
 
-                        <span th:style="'font-size:'+${user.size}+'pt;color:red;'" th:text="${user.name}"></span> <br>    <!-- get user's name -->
-                        <span th:text="${user.password}"></span>
+                        <span th:text="${user.name}"></span> <br>    <!-- get user's name -->
+                        <span th:text="${user.color}"></span>
 
-                        <!-- similar to switch-case structure -->
-                        <div th:switch="${user.name}">
-                            <span th:case="'Bobby'">HEY! It's the instructor!!!</span>
-                            <span th:case="'Steve'">Uh oh! It's Steve!</span>
-                            <span th:case="*">General user</span>   <!-- * is for the remainings -->
-                        </div>
                     </li>
                 </ul>
             </div>

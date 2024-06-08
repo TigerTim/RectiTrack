@@ -11,16 +11,18 @@ public class User {
 
     private int uid;
     private String name;
-    private String password;
-    private int size;
+    private int width;
+    private int height;
+    private String color;
     // This table has 4 attributes and 1 of them is "uid" that is gonna auto increment
 
     public User() {
     }
-    public User(String name, String password, int size) {
+    public User(String name, int width, int height, String color) {
         this.name = name;
-        this.password = password;
-        this.size = size;
+        this.width = width;
+        this.height = height;
+        this.color = color;
     }
     public String getName() {
         return name;
@@ -28,17 +30,23 @@ public class User {
     public void setName(String name) {
         this.name = name;
     }
-    public String getPassword() {
-        return password;
+    public int getWidth() {
+        return width;
     }
-    public void setPassword(String password) {
-        this.password = password;
+    public void setWidth(int width) {
+        this.width = width;
     }
-    public int getSize() {
-        return size;
+    public int getHeight() {
+        return height;
     }
-    public void setSize(int size) {
-        this.size = size;
+    public void setHeight(int height) {
+        this.height = height;
+    }
+    public String getColor() {
+        return color;
+    }
+    public void setColor(String color) {
+        this.color = color;
     }
     public int getUid() {
         return uid;
@@ -46,5 +54,4 @@ public class User {
     public void setUid(int uid) {
         this.uid = uid;
     }
-    
 }

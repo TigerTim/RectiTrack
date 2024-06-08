@@ -1,6 +1,6 @@
 package com.example.demo.controllers;
 
-import java.util.ArrayList;
+// import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -8,16 +8,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-
+import org.springframework.web.bind.annotation.PathVariable;
 
 import com.example.demo.models.User;
 import com.example.demo.models.UserRepository;
 
-import jakarta.servlet.http.HttpServlet;
+// import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletResponse;
 
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+// import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 
@@ -31,6 +31,7 @@ public class UsersController {
     private UserRepository userRepo;
     // Purpose of "userRepo": save data and find data from DB
 
+    // enter the endpt below => return showAll => Print all users' attributes
     @GetMapping("/users/view")      // endpoint
     public String getAllUsers(Model model){
         System.out.println("Getting all users");
@@ -54,8 +55,17 @@ public class UsersController {
         return "showAll";
     }
 
+    // @GetMapping("/users/view/{uid}")
+    // public String getUser(Model model, @PathVariable int uid) {
+    //     System.out.println("Get User number " + uid);
+    //     // User user = userRepo.findById(uid);
+    //     // model.addAttribute("us", user);
+    //     return "showUser";
+    // }
+    
+
     // For backend server
-    // Data coming from the form would be a PostMapping
+    // Data coming from the input form would be a PostMapping (ie being sent to here)
     @PostMapping("/users/add")       // endpoint
     public String addUser(@RequestParam Map<String, String> newuser, HttpServletResponse response) {    
         // "HttpServletResponse" will help me w/ the response that Im going to give in my server
@@ -66,19 +76,21 @@ public class UsersController {
         String newName = newuser.get("name");   // "newuser" is a map => use "get" method 
         // => grab "newName" from the "name" attribute has value "name" (grab its value and assign to "newName")
         
-        String newPwd = newuser.get("password");    // same idea as above but from the "name" attribute has value "password"
+        int newWidth = Integer.parseInt(newuser.get("width"));
 
-        // value "size" is # but it will be coming as a STRING (all communications happen on the web are STRING)
-        int newSize = Integer.parseInt(newuser.get("size"));
-        // convert the value corresponding w/ value "size" to integer (which is string -> int)
+        // values are # but it will be coming as a STRING (all communications happen on the web are STRING)
+        int newHeight = Integer.parseInt(newuser.get("height"));    
+        // convert the value to integer (which is string -> int)
+
+        String newColor = newuser.get("color");
         
-        userRepo.save(new User(newName, newPwd, newSize));      // save a new user into DB
+        userRepo.save(new User(newName, newWidth, newHeight, newColor));      // save a new user into DB
         // userRepo will do the INSERT command into the DB
         // This allows us NOT to write any SQL at all (ie dont have to use SQL at all)
 
         response.setStatus(201);    // 201 is INT and this means we just create a new obj
 
-        return "addedUser";   // return a file called "addUser"
+        return "addedUser";   // return a file called "addedUser" (ie go to the file and run it)
         // dont have to return "users/addedUser" as in video b/c there is no "users" folder 
     }
     
