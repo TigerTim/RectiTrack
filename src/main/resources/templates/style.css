@@ -1,0 +1,23 @@
+p, table {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+table, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+table {
+    width: 30%;
+}
+
+td {
+    width: 25%;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 10px;
+}
+
+.first-col {
+    width: 12%;
+}

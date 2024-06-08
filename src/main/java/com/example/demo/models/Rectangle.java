@@ -3,22 +3,22 @@ package com.example.demo.models;
 import jakarta.persistence.*;   // * means for all
 
 @Entity
-@Table(name="users")
-public class User {
+@Table(name="rectangle")
+public class Rectangle {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    // Purpose of the above 2 lines: create a SERIAL data type for the variable below which is "uid"
+    // Purpose of the above 2 lines: create a SERIAL data type for the variable below which is "id"
 
-    private int uid;
+    private int id;
     private String name;
     private int width;
     private int height;
     private String color;
-    // This table has 4 attributes and 1 of them is "uid" that is gonna auto increment
+    // This table has 4 attributes and 1 of them is "id" that is gonna auto increment
 
-    public User() {
+    public Rectangle() {
     }
-    public User(String name, int width, int height, String color) {
+    public Rectangle(String name, int width, int height, String color) {
         this.name = name;
         this.width = width;
         this.height = height;
@@ -48,10 +48,10 @@ public class User {
     public void setColor(String color) {
         this.color = color;
     }
-    public int getUid() {
-        return uid;
+    public int getId() {
+        return id;
     }
-    public void setUid(int uid) {
-        this.uid = uid;
+    public void setId(int id) {
+        this.id = id;
     }
 }
