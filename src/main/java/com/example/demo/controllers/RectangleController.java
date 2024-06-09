@@ -46,12 +46,12 @@ public class RectangleController {
         // users.add(new User("Steve","112",19));
 
         // Other way: 
-        List<Rectangle> rectangles = rectangleRepo.findAll();      // "findAll() method = SELECT * FROM users (in SQL)"
+        List<Rectangle> rectangle = rectangleRepo.findAll();      // "findAll() method = SELECT * FROM users (in SQL)"
         // Summary: Get users from DB and "userRepo" connects DB for me and grab all users and put in "us" variable below
         // When open DemoApp initially => only see USERS b/c there is no users to display
 
         // end of database call
-        model.addAttribute("rec", rectangles);    // "us" is a variable with database name "users"
+        model.addAttribute("rec", rectangle);    // "us" is a variable with database name "users"
         return "showAll";
     }
 

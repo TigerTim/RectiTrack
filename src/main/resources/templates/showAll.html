@@ -8,23 +8,23 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <p>Rectangles</p>
-    <!-- <div>
+    <p class="rec">Rectangles</p>
+    <div>
         <table class="rec-table">
-            <tr class="head-line">
+            <tr>
                 <td class="first-col"></td>
                 <td>name</td>
                 <td>color</td>
                 <td></td>
             </tr>
-        </table>
-    </div> -->
-    <ul>
-        <li th:each="rectangle:${rec}">
-            <span th:text="${rectangle.name}"></span> <br>
-            <span th:text="${rectangle.color}"></span>
 
-        </li>
-    </ul>
+            <tr th:each="rectangle, iter:${rec}">
+                <td th:text="${iter.index + 1}"></td>
+                <td th:text="${rectangle.name}"></td>
+                <td th:text="${rectangle.color}"></td>
+                <td>DELETE</td>
+            </tr>
+        </table>      
+    </div>
 </body>
 </html>

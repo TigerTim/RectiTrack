@@ -8,7 +8,7 @@ public class Rectangle {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     // Purpose of the above 2 lines: create a SERIAL data type for the variable below which is "id"
-
+    
     private int id;
     private String name;
     private int width;
