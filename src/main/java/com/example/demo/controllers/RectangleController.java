@@ -22,38 +22,39 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 
 
-
 @Controller
 public class RectangleController {  
     
-    // Get users from DB
+    // Get rectangles from DB
     @Autowired
     private RectangleRepository rectangleRepo;
-    // Purpose of "userRepo": save data and find data from DB
+    // Purpose of "rectangleRepo": save data and find data from DB
 
-    // enter the endpt below => return showAll => Print all users' attributes
-    @GetMapping("/rec/view")      // endpoint
+    
+    // NOTE: Files in thymeleaf  cannot directly connect via localhost
+    // => These files must be connected indirectly via @RequestMapping (@GetMapping is a specified type of generic @RequestMapping)
+    @GetMapping("/")      // this means blank (ie = leave the parameter blank ("")
+    // If no path specify, computer will automatically fill the "/" into the path
     public String getAllRectangles(Model model){
-        System.out.println("Getting all rectangles");
-        // get all users from database
+        System.out.println("Getting all rectangles");   // testing purpose
 
-        // these users above are added to a list manually
-        // List <User> users = new ArrayList<>();
-        // users.add(new User("Alice","123",25));
-        // users.add(new User("Bobby","456",6));
-        // users.add(new User("Charlie,","789",7));
-        // users.add(new User("David","101",8));
-        // users.add(new User("Steve","112",19));
-
-        // Other way: 
-        List<Rectangle> rectangle = rectangleRepo.findAll();      // "findAll() method = SELECT * FROM users (in SQL)"
-        // Summary: Get users from DB and "userRepo" connects DB for me and grab all users and put in "us" variable below
-        // When open DemoApp initially => only see USERS b/c there is no users to display
+        List<Rectangle> rectangle = rectangleRepo.findAll();      // "findAll() method = SELECT * FROM rectangle (in SQL)"
+        // Summary: Get rectangles from DB and "rectangleRepo" connects DB for me and grab all rectangles and put in "rec" variable below
+        // When open DemoApp initially => see no rectangle b/c there is no rectangle to display
 
         // end of database call
-        model.addAttribute("rec", rectangle);    // "us" is a variable with database name "users"
-        return "showAll";
+        model.addAttribute("rec", rectangle);      // adding new attribute to Model obj
+        // "rec" is attribute's name (key) and rectangle is attribute's value 
+        // rectangle here is a list of rectangles
+        return "mainPage";
     }
+
+    // Navigate from mainPage to user input page
+    @GetMapping("/rec/add")
+    public String getAddPage() {
+        return "add";
+    }
+    
 
     // @GetMapping("/users/view/{uid}")
     // public String getUser(Model model, @PathVariable int uid) {
@@ -65,34 +66,46 @@ public class RectangleController {
     
 
     // For backend server
-    // Data coming from the input form would be a PostMapping (ie being sent to here)
-    @PostMapping("/rec/add")       // endpoint
-    public String addRec(@RequestParam Map<String, String> newRec, HttpServletResponse response) {    
+    // Data coming from the input form would be a PostMapping (ie being sent to here) (After click SEND)
+    @PostMapping("/rec/add")
+    public String addRec(@RequestParam Map<String, String> newRec, Model model, HttpServletResponse response) {
         // "HttpServletResponse" will help me w/ the response that Im going to give in my server
-        
-        //TODO: process POST request
-        
-        System.out.println("ADD RECTANGLE");     // print out what Im going to do in this endpt
-        String newName = newRec.get("name");   // "newuser" is a map => use "get" method 
+        System.out.println("ADD RECTANGLE");    // testing purpose
+
+        // Getting user input 
+        String newName = newRec.get("name");    // "newRec" is a map => use "get" method 
         // => grab "newName" from the "name" attribute has value "name" (grab its value and assign to "newName")
-        
-        int newWidth = Integer.parseInt(newRec.get("width"));
-
-        // values are # but it will be coming as a STRING (all communications happen on the web are STRING)
-        int newHeight = Integer.parseInt(newRec.get("height"));    
-        // convert the value to integer (which is string -> int)
-
+        String newWidthStr = newRec.get("width");
+        String newHeightStr = newRec.get("height");
         String newColor = newRec.get("color");
+
+        // Adding input values back to the input textbox
+        model.addAttribute("name", newName);
+        model.addAttribute("width", newWidthStr);
+        model.addAttribute("height", newHeightStr);
+        model.addAttribute("color", newColor);
+
+        // If invalid input => remain on same user input page when click SEND
+        if (newName == null || newName.isEmpty() || newWidthStr == null || newWidthStr.isEmpty() || 
+            newHeightStr == null || newHeightStr.isEmpty() || newColor == null || newColor.isEmpty()) {
+            System.out.println("INVALID INPUT");
+            return "add";
+        }
+
+        // NOTE: Eventho values are #, they will be coming as a STRING (all communications happen on the web are STRING)
+        // convert the value to integer (which is string -> int)
+        int newWidth = Integer.parseInt(newWidthStr);
+        int newHeight = Integer.parseInt(newHeightStr);
         
-        rectangleRepo.save(new Rectangle(newName, newWidth, newHeight, newColor));      // save a new user into DB
-        // userRepo will do the INSERT command into the DB
+        rectangleRepo.save(new Rectangle(newName, newWidth, newHeight, newColor));  // save a new rectangle into DB
+        // rectangleRepo will do the INSERT command into the DB
         // This allows us NOT to write any SQL at all (ie dont have to use SQL at all)
-
-        response.setStatus(201);    // 201 is INT and this means we just create a new obj
-
-        return "addedRec";   // return a file called "addedUser" (ie go to the file and run it)
-        // dont have to return "users/addedUser" as in video b/c there is no "users" folder 
+        
+        response.setStatus(201);    // = response.setStatus(HttpServletResponse.SC_CREATED)
+        // 201 is a HTTP status message (server always returns a message for every request) => This means we just create a new obj 
+        
+        return "add";   // When click SEND => values are clear and remain on the same user input page
     }
-    
     // data on DB will persist even when I do many pushes or restart the application
+
 }
