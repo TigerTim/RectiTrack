@@ -31,7 +31,7 @@ public class RectangleController {
     // Purpose of "rectangleRepo": save data and find data from DB
 
     
-    // NOTE: Files in thymeleaf  cannot directly connect via localhost
+    // NOTE: Files in thymeleaf cannot directly connect via localhost
     // => These files must be connected indirectly via @RequestMapping (@GetMapping is a specified type of generic @RequestMapping)
     @GetMapping("/")      // this means blank (ie = leave the parameter blank ("")
     // If no path specify, computer will automatically fill the "/" into the path
@@ -54,15 +54,6 @@ public class RectangleController {
     public String getAddPage() {
         return "addRec";
     }
-    
-
-    // @GetMapping("/users/view/{uid}")
-    // public String getUser(Model model, @PathVariable int uid) {
-    //     System.out.println("Get User number " + uid);
-    //     // User user = userRepo.findById(uid);
-    //     // model.addAttribute("us", user);
-    //     return "showUser";
-    // }
 
     // The rectangle must exist on mainpage so that when click rec name => navigate to the individual page
     @GetMapping("/view/{name}")
@@ -96,6 +87,23 @@ public class RectangleController {
             return "addRec";
         }
 
+        // Check if rectangle name already exists 
+        Rectangle existedRec = rectangleRepo.findByName(newName);    
+        // Reason why not use String existedRec = rectangleRepo.findByName(newName).getName() here
+        // b/c if cannot find matching name => rectangleRepo.findByName(newName) return null
+        // and call getter on a null obj => throw a NullPointerException 
+        // Thats why need to check to ensure it finds a matching name (ie != null) to proceed the comparison using getter
+        // If == null => skip the cond b/c this name is new to DB => Valid
+
+        // use getter "getName()" because "name" attr is private and inaccessible from outside
+        if (existedRec != null && newName.trim().equals(existedRec.getName())) {    
+            // trim() only remove space b4 and after the string (Ex: "   Hello  " => "Hello")
+            // But cannot remove space within each character (Ex: "  He l lo  " => "He l lo")
+            System.out.println("NAME ALREADY EXISTS");
+            model.addAttribute("error2", "Name already exists");
+            return "addRec";
+        }
+
         // NOTE: Eventho input values are #, they will be coming as a STRING (all communications happen on the web are STRING)
         // convert the value to integer (ie string -> int)
         int newWidth = Integer.parseInt(newWidthStr);
@@ -104,7 +112,7 @@ public class RectangleController {
         // Check if enter valid width or height (reach here => All fields are filled)
         if (newWidth <= 0 || newHeight <= 0) {
             System.out.println("INVALID WIDTH OR HEIGHT");
-            model.addAttribute("error2", "Please enter valid width or height");
+            model.addAttribute("error3", "Please enter valid width or height");
             return "addRec";
         }
 

@@ -38,8 +38,7 @@
                     <a th:href="@{'/view/' + ${rectangle.name}}" th:text="${rectangle.name}"></a>
                     <!-- If no '@' symbol => href will treat "'/rec/view/' + ${rectangle.name}" as a literal string (ie static link)
                     rather than consider it an expression to substitute value
-                    hyperlink (ie anchor tag) uses GET method by default
-                    => No way to use POST method w/ hyperlink 
+                    Hyperlink (ie anchor tag) uses GET method by default => No way to use POST method w/ hyperlink 
                     (if want to, style the "form" tag to look like a hyperlink and apply POST method) -->
                 </td>
                 <td th:text="${rectangle.color}"></td>

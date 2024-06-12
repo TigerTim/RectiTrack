@@ -35,9 +35,23 @@
         .attr-col {
             width: 115px;
         }
+
+        .return-btn {
+            background-color: lightgreen;
+            border-radius: 7px;
+            border: none;
+            padding: 8px;
+            margin-top: 10px;
+            margin-left: 10px;
+            font-size: 15px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
+    <form action="/" method="get">      <!-- navigate to the mainPage (ie path "/") -->
+        <button th:text="Return" class="return-btn"></button>
+    </form>
     <div class="outer-div">
         <div th:text="${rec.name}" class="rec-name" th:style="'background-color: ' + ${rec.color}"></div>
         <!-- dynamically style the box based on rectangle color using th:style -->
