@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import com.example.demo.models.Rectangle;
 import com.example.demo.models.RectangleRepository;
 
-// import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletResponse;
 
 import org.springframework.web.bind.annotation.PostMapping;
@@ -52,7 +52,7 @@ public class RectangleController {
     // Navigate from mainPage to user input page
     @GetMapping("/rec/add")
     public String getAddPage() {
-        return "add";
+        return "addRec";
     }
     
 
@@ -63,7 +63,15 @@ public class RectangleController {
     //     // model.addAttribute("us", user);
     //     return "showUser";
     // }
-    
+
+    // The rectangle must exist on mainpage so that when click rec name => navigate to the individual page
+    @GetMapping("/view/{name}")
+    public String getRec(Model model, @PathVariable String name) {
+        System.out.println("Get rectangle name " + name);
+        Rectangle rectangle = rectangleRepo.findByName(name);   // modify the RectangleRepo file to get the Rectangle obj instead of List<Rectangle>
+        model.addAttribute("rec", rectangle);
+        return "showRec";
+    }
 
     // For backend server
     // Data coming from the input form would be a PostMapping (ie being sent to here) (After click SEND)
@@ -79,24 +87,27 @@ public class RectangleController {
         String newHeightStr = newRec.get("height");
         String newColor = newRec.get("color");
 
-        // Adding input values back to the input textbox
-        model.addAttribute("name", newName);
-        model.addAttribute("width", newWidthStr);
-        model.addAttribute("height", newHeightStr);
-        model.addAttribute("color", newColor);
 
-        // If invalid input => remain on same user input page when click SEND
-        if (newName == null || newName.isEmpty() || newWidthStr == null || newWidthStr.isEmpty() || 
-            newHeightStr == null || newHeightStr.isEmpty() || newColor == null || newColor.isEmpty()) {
+        // Check if any fields are left empty 
+        if (newName == null || newWidthStr == null ||  newHeightStr == null || newColor == null || 
+            newName.isEmpty() || newWidthStr.isEmpty() || newHeightStr.isEmpty() || newColor.isEmpty()) {
             System.out.println("INVALID INPUT");
-            return "add";
+            model.addAttribute("error1", "All fields must be filled");
+            return "addRec";
         }
 
-        // NOTE: Eventho values are #, they will be coming as a STRING (all communications happen on the web are STRING)
-        // convert the value to integer (which is string -> int)
+        // NOTE: Eventho input values are #, they will be coming as a STRING (all communications happen on the web are STRING)
+        // convert the value to integer (ie string -> int)
         int newWidth = Integer.parseInt(newWidthStr);
         int newHeight = Integer.parseInt(newHeightStr);
-        
+
+        // Check if enter valid width or height (reach here => All fields are filled)
+        if (newWidth <= 0 || newHeight <= 0) {
+            System.out.println("INVALID WIDTH OR HEIGHT");
+            model.addAttribute("error2", "Please enter valid width or height");
+            return "addRec";
+        }
+
         rectangleRepo.save(new Rectangle(newName, newWidth, newHeight, newColor));  // save a new rectangle into DB
         // rectangleRepo will do the INSERT command into the DB
         // This allows us NOT to write any SQL at all (ie dont have to use SQL at all)
@@ -104,7 +115,8 @@ public class RectangleController {
         response.setStatus(201);    // = response.setStatus(HttpServletResponse.SC_CREATED)
         // 201 is a HTTP status message (server always returns a message for every request) => This means we just create a new obj 
         
-        return "add";   // When click SEND => values are clear and remain on the same user input page
+        model.addAttribute("successMessage", "Successfully Added Rectangle");
+        return "addRec";   // When click SEND => values are clear and remain on the same user input page
     }
     // data on DB will persist even when I do many pushes or restart the application
 

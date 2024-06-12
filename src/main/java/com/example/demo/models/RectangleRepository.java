@@ -8,10 +8,11 @@ import java.util.List;
 public interface RectangleRepository extends JpaRepository<Rectangle, Integer> {     
     // JpaRepository is an interface => an inteface (UserRepository) extends another interface (which is "JpaRepository")
     // JpaRepo needs to be attached to a class that already defined as a table 
-    // => In bracket, "User" class and second parameter is "id" type (which is of type "int")
+    // => In bracket, "Rectangle" class and second parameter is "id" type (which is of type "int")
     // Now, for ex, If write a code to enter new user to database (DB) => repository will automatically translate that code into SQL to send it over DB
     
     // Assume "Name" is unique
-    List<Rectangle> findByName(String name);
-    // Note: the parameters' name must match the variable in "User" class in User.java file
+    // List<Rectangle> findByName(String name);
+    Rectangle findByName(String name);      // change to Rectangle type instead of List<Rectangle> to use in RectangleController
+    // Note: the parameters' name must match the variable in "Rectangle" class in Rectangle.java file
 }

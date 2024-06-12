@@ -18,6 +18,10 @@ form {
     padding-left: 42%;
 }
 
+.view-rec {
+    padding-left: 0%;
+}
+
 .rec-service {
     text-align: center;
     font-size: 30px;

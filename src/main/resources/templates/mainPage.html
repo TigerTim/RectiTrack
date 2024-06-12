@@ -4,68 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Main Page</title>
-    <style>
-        body {
-            font-family: Arial, Helvetica, sans-serif;
-            background-color: #FEFEFE;
-        }
+    <link rel="stylesheet" href="style.css">
 
-        button {
-            background-color: greenyellow;
-            border-radius: 7px;
-            border: none;  
-            font-size: 20px;
-            padding: 10px;
-            cursor: pointer;
-            
-        }
+    <!-- NOTE: "src/main/resources/templates" is the default directory for Thymeleaf templates (or files)
+    Spring is preconfigured to serve STATIC files 
+    => Omit "/src/main/resources/static" path segment (when referencing img or other STATIC files)
+    Ex1: If in static is only style.css file => Files in templates folder can refer to this via "style.css" (Ignore the previous path)
+    Ex2" If in static is a sub-folder "style" containing style.css 
+    => Thymeleaf templates refer to this via "style/style.css" (only take the path after STATIC onwards)
+    Ex3: Use ex1 and refer to style.css via "src/main/resources/static/style.css" => Faulthy path (cannot access style.css)
+    => Avoid including "resources" or "static" keyword in accessing static files -->
 
-        form {
-            display: inline;
-            padding-left: 42%;
-        }
-
-        .rec-service {
-            text-align: center;
-            font-size: 30px;
-        }
-        
-        p {
-            text-align: center;
-        }
-
-        p, table {
-            font-family: Arial, Helvetica, sans-serif;
-        }
-        
-        table, td {
-            border: 1px solid black;
-            border-collapse: collapse;
-        }
-        
-        table {
-            width: 30%;
-            margin-left: auto;
-            margin-right: auto;
-            margin-top: 30px;
-        }
-        
-        td {
-            width: 25%;
-            padding-top: 5px;
-            padding-bottom: 5px;
-            padding-left: 10px;
-        }
-        
-        .first-col {
-            width: 12%;
-        }
-        
-        .rec {
-            font-size: 30px;
-            text-align: center;
-        }
-    </style>
 </head>
 <body>
     <p class="rec-service">Rectangle Service</p>
@@ -84,10 +33,19 @@
             </tr>
 
             <tr th:each="rectangle, iter:${rec}">
-                <td th:text="${iter.index + 1}"></td>
-                <td th:text="${rectangle.name}"></td>
+                <td class="first-col" th:text="${iter.index + 1}"></td>
+                <td>
+                    <a th:href="@{'/view/' + ${rectangle.name}}" th:text="${rectangle.name}"></a>
+                    <!-- If no '@' symbol => href will treat "'/rec/view/' + ${rectangle.name}" as a literal string (ie static link)
+                    rather than consider it an expression to substitute value
+                    hyperlink (ie anchor tag) uses GET method by default
+                    => No way to use POST method w/ hyperlink 
+                    (if want to, style the "form" tag to look like a hyperlink and apply POST method) -->
+                </td>
                 <td th:text="${rectangle.color}"></td>
-                <td>Delete</td>
+                <td>
+                    DELETE
+                </td>
             </tr>
         </table>  
     </div>    

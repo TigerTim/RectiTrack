@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rectangle Info</title>
+    <style>
+        .outer-div {
+            margin-left: 20px;
+        }
+
+        .rec-name {
+            padding: 18px 38px 38px 18px;
+            font-size: 20px;
+            margin-top: 20px;
+            display: inline-block;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 220px;
+            margin-top: 20px;
+        }
+
+        td {
+            border: 2px solid black;
+            padding: 5px 0px 5px 8px;
+            text-align: left;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .attr-col {
+            width: 115px;
+        }
+    </style>
+</head>
+<body>
+    <div class="outer-div">
+        <div th:text="${rec.name}" class="rec-name" th:style="'background-color: ' + ${rec.color}"></div>
+        <!-- dynamically style the box based on rectangle color using th:style -->
+        <table>
+            <tr>
+                <td th:text="Name" class="attr-col"></td>
+                <td th:text="${rec.name}"></td>
+            </tr>
+
+            <tr>
+                <td th:text="Width" class="attr-col"></td>
+                <td th:text="${rec.width}"></td>
+            </tr>
+
+            <tr>
+                <td th:text="Height" class="attr-col"></td>
+                <td th:text="${rec.height}"></td>
+            </tr>
+
+            <tr>
+                <td th:text="Color" class="attr-col"></td>
+                <td th:text="${rec.color}"></td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>
