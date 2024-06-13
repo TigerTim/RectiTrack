@@ -19,6 +19,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.web.bind.annotation.PostMapping;
 // import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestBody;
+
 
 
 
@@ -80,7 +82,9 @@ public class RectangleController {
 
 
         // Check if any fields are left empty 
-        if (newName == null || newWidthStr == null ||  newHeightStr == null || newColor == null || 
+        // 1st check: if user dont fill anything (including whitespace) 
+        // 2nd check: if user fill whitespace (ie newName != null) (but not letters or #)
+        if (newName == null || (newName != null && newName.trim().equals("")) || newWidthStr == null ||  newHeightStr == null || newColor == null || 
             newName.isEmpty() || newWidthStr.isEmpty() || newHeightStr.isEmpty() || newColor.isEmpty()) {
             System.out.println("INVALID INPUT");
             model.addAttribute("error1", "All fields must be filled");
@@ -112,7 +116,7 @@ public class RectangleController {
         // Check if enter valid width or height (reach here => All fields are filled)
         if (newWidth <= 0 || newHeight <= 0) {
             System.out.println("INVALID WIDTH OR HEIGHT");
-            model.addAttribute("error3", "Please enter valid width or height");
+            model.addAttribute("error3", "Enter valid width or height");
             return "addRec";
         }
 
@@ -128,4 +132,13 @@ public class RectangleController {
     }
     // data on DB will persist even when I do many pushes or restart the application
 
+
+    // Delete row in mainPage
+    @PostMapping("/rec/delete/{name}")
+    public String deleteRec(@PathVariable String name) {
+        Rectangle rectangle = rectangleRepo.findByName(name);   // find rectangle has matching name
+        rectangleRepo.delete(rectangle);       // delete from DB
+        return "redirect:/";
+    }
+    
 }

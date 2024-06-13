@@ -17,33 +17,44 @@
 
 </head>
 <body>
-    <p class="rec-service">Rectangle Service</p>
-    <form action="/rec/add" method="get">
+    <p class="rec-service">Rectangle Database</p>
+    <form action="/rec/add" method="get" class="add-rec-form">
         <p><button>Add Rectangle</button></p>   
         <!-- put <button> tag inside a <p> tag to get text-align: center -->
     </form>
 
     <div>
-        <table class="rec-table">
+        <table>
             <tr>
                 <td class="first-col"></td>
-                <td>name</td>
-                <td>color</td>
+                <td th:text="name"></td>
+                <td th:text="color"></td>
                 <td></td>
             </tr>
 
             <tr th:each="rectangle, iter:${rec}">
                 <td class="first-col" th:text="${iter.index + 1}"></td>
+
                 <td>
-                    <a th:href="@{'/view/' + ${rectangle.name}}" th:text="${rectangle.name}"></a>
+                    <!-- USING <a> tag -->
+                    <!-- <a th:href="@{'/view/' + ${rectangle.name}}" th:text="${rectangle.name}"></a> -->
                     <!-- If no '@' symbol => href will treat "'/rec/view/' + ${rectangle.name}" as a literal string (ie static link)
                     rather than consider it an expression to substitute value
                     Hyperlink (ie anchor tag) uses GET method by default => No way to use POST method w/ hyperlink 
                     (if want to, style the "form" tag to look like a hyperlink and apply POST method) -->
+
+                    <!-- USING <form> tag -->
+                    <form th:action="@{'/view/' + ${rectangle.name}}" method="get" stlye="display: inline;">
+                        <button type="submit" class="name_delete-btn" th:text="${rectangle.name}"></button>
+                    </form>
                 </td>
+
                 <td th:text="${rectangle.color}"></td>
+                
                 <td>
-                    DELETE
+                    <form th:action="@{'/rec/delete/' + ${rectangle.name}}" method="post" style="display: inline;">
+                        <button type="submit" class="name_delete-btn" th:text="Delete"></button>
+                    </form>
                 </td>
             </tr>
         </table>  

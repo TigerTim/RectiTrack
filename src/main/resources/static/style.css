@@ -13,7 +13,7 @@ button {
     
 }
 
-form {
+.add-rec-form {
     display: inline;
     padding-left: 42%;
 }
@@ -62,3 +62,19 @@ td {
     font-size: 30px;
     text-align: center;
 }
+
+.name_delete-btn {
+    background: none;
+    border: none;
+    color: blue;
+    text-decoration: none;
+    cursor: pointer;
+    font-size: inherit;
+    font-family: inherit;
+    padding-left: 0px;
+}
+
+.name_delete-btn:hover, .name_delete-btn:focus {
+    color: darkblue;
+}
+
