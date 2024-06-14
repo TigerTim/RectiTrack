@@ -49,6 +49,10 @@ public class RectangleController {
         // "rec" is attribute's name (key) and rectangle is attribute's value 
         // rectangle here is a list of rectangles
         return "mainPage";
+        // Cannot use return "redirect:/" here
+        // NOTE: Since redirect:/ will send a new GET request to the path "/" => Call @GetMapping("/") (ie invoke func above)
+        // => Create an infinite loop 
+        // return "redirect:/" only be used when there is a base to redirect to sth (in which the func return a non-redirect path)
     }
 
     // Navigate from mainPage to user input page
@@ -88,7 +92,14 @@ public class RectangleController {
             newName.isEmpty() || newWidthStr.isEmpty() || newHeightStr.isEmpty() || newColor.isEmpty()) {
             System.out.println("INVALID INPUT");
             model.addAttribute("error1", "All fields must be filled");
-            return "addRec";
+            return "addRec";    
+            // return "redirect:/rec/add";      
+            // this can be used the same as above because the addRec doesnt change anything and we want to page remain its original state (ie no input value)
+            // when user enter (in)correctly => page will remove all input value in both cases
+            // But the error messange wont be displayed b/c "redirect" sends a new GET request to specifed path (URL) and it doesnt have access to the Model attr 
+            // Model attr in one request is not automatically carried to the next request 
+            // In this case, add the attribute to current request's model. When redirect, a new request is made, and this model attribute is lost
+            // => Cannot displayed any error message in model attr
         }
 
         // Check if rectangle name already exists 
@@ -106,6 +117,7 @@ public class RectangleController {
             System.out.println("NAME ALREADY EXISTS");
             model.addAttribute("error2", "Name already exists");
             return "addRec";
+            // return "redirect:/rec/add";      // check reason above
         }
 
         // NOTE: Eventho input values are #, they will be coming as a STRING (all communications happen on the web are STRING)
@@ -118,6 +130,7 @@ public class RectangleController {
             System.out.println("INVALID WIDTH OR HEIGHT");
             model.addAttribute("error3", "Enter valid width or height");
             return "addRec";
+            // return "redirect:/rec/add";      // check reason above
         }
 
         rectangleRepo.save(new Rectangle(newName, newWidth, newHeight, newColor));  // save a new rectangle into DB
@@ -129,6 +142,7 @@ public class RectangleController {
         
         model.addAttribute("successMessage", "Successfully Added Rectangle");
         return "addRec";   // When click SEND => values are clear and remain on the same user input page
+        // return "redirect:/rec/add";      // check reason above
     }
     // data on DB will persist even when I do many pushes or restart the application
 
@@ -137,8 +151,22 @@ public class RectangleController {
     @PostMapping("/rec/delete/{name}")
     public String deleteRec(@PathVariable String name) {
         Rectangle rectangle = rectangleRepo.findByName(name);   // find rectangle has matching name
-        rectangleRepo.delete(rectangle);       // delete from DB
-        return "redirect:/";
+        if (rectangle != null)      // avoid NullPointerException if rec DNE
+            rectangleRepo.delete(rectangle);       // delete from DB
+        return "redirect:/";    // not return "mainPage";
+        // NOTE: redirect to a path (or URL) not a file => redirect:addRec => False (but should be "redirect:/rec/add" instead)
+        // HTTP Redirect: This sends a 302 HTTP response to the client, instructing the browser to make a new GET request to the root URL ("/").
+        // New Request: A new request to "/" will be made, triggering (ie invoking) your controller method mapped to @GetMapping("/") (ie getAllRectangles func)
+        // => This returns a mainPage
+        // => User sees the updated list of rectangles w/o needing to manually refresh the page or perform any additional actions.
+
+        // If return "mainPage" here => when click DELETE => navigate to the URL ("/rec/delete/{name}") => Whitelable error page
+        // What we need is remain the same page, but need to refresh the page (ie to update the deleted data) => use return "redirect:/";
+
+        // Summary: 
+        // return "mainPage" directly from the delete method will not refresh the URL and might not have the updated model data.
+        // returning "redirect:/" ensures the browser's URL is updated and the main page is requested afresh
+
     }
     
 }
