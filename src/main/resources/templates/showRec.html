@@ -10,15 +10,13 @@
         }
 
         .rec-name {
-            padding: 18px 38px 38px 18px;
-            font-size: 20px;
             margin-top: 20px;
             display: inline-block;
         }
 
         table {
             border-collapse: collapse;
-            width: 220px;
+            width: 250px;
             margin-top: 20px;
         }
 
@@ -33,7 +31,11 @@
         }
 
         .attr-col {
-            width: 115px;
+            width: 52%;
+        }
+
+        .input-td {
+            padding-left: 4px;
         }
 
         .return-btn {
@@ -46,6 +48,32 @@
             font-size: 15px;
             cursor: pointer;
         }
+
+        .update-btn {
+            background-color: lightblue;
+            border-radius: 7px;
+            border: none;
+            padding: 8px;
+            margin-top: 20px;
+            font-size: 15px;
+            cursor: pointer;
+        }
+
+        input {
+            width: 80%;
+        }
+
+        .message {
+            font-size: 16px;
+            color: red;
+            margin-top: 10px;
+        }
+
+        .success {
+            font-size: 16px;
+            color: green;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
@@ -53,29 +81,45 @@
         <button th:text="Return" class="return-btn"></button>
     </form>
     <div class="outer-div">
-        <div th:text="${rec.name}" class="rec-name" th:style="'background-color: ' + ${rec.color}"></div>
+        <div class="rec-name" th:style="'background-color: ' + ${rec.color} + '; width: ' + ${rec.width} + 'px; height: ' + ${rec.height} + 'px'"></div>
         <!-- dynamically style the box based on rectangle color using th:style -->
-        <table>
-            <tr>
-                <td th:text="Name" class="attr-col"></td>
-                <td th:text="${rec.name}"></td>
-            </tr>
+        <form th:action="@{'/rec/update/' + ${rec.name}}" method="post">
+            <table>
+                <tr>
+                    <td th:text="Name" class="attr-col"></td>
+                    <td th:text="${rec.name}"></td>
+                </tr>
 
-            <tr>
-                <td th:text="Width" class="attr-col"></td>
-                <td th:text="${rec.width}"></td>
-            </tr>
+                <tr>
+                    <td th:text="Width" class="attr-col"></td>
+                    <td class="input-td">
+                        <input type="number" name="newWidth" th:value="${rec.width}">
+                    </td>
+                </tr>
 
-            <tr>
-                <td th:text="Height" class="attr-col"></td>
-                <td th:text="${rec.height}"></td>
-            </tr>
+                <tr>
+                    <td th:text="Height" class="attr-col"></td>
+                    <td class="input-td">
+                        <input type="number" name="newHeight" th:value="${rec.height}">
+                    </td>
+                </tr>
 
-            <tr>
-                <td th:text="Color" class="attr-col"></td>
-                <td th:text="${rec.color}"></td>
-            </tr>
-        </table>
+                <tr>
+                    <td th:text="Color" class="attr-col"></td>
+                    <td class="input-td">
+                        <input type="color" name="newColor" th:value="${rec.color}">
+                    </td>
+                </tr>
+            </table>
+            <button type="submit" class="update-btn" th:text="Update"></button>
+        </form>
+        <div th:if="${error}" class="message">
+            <span th:text="${error}"></span>
+        </div>
+
+        <div th:if="${success}" class="success">
+            <span th:text="${success}"></span>
+        </div>
     </div>
 </body>
 </html>

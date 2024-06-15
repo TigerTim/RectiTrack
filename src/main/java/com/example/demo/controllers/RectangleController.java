@@ -17,10 +17,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletResponse;
 
 import org.springframework.web.bind.annotation.PostMapping;
-// import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestBody;
-
+import org.springframework.web.bind.annotation.RequestParam;
 
 
 
@@ -150,9 +148,10 @@ public class RectangleController {
     // Delete row in mainPage
     @PostMapping("/rec/delete/{name}")
     public String deleteRec(@PathVariable String name) {
+        // PathVariable takes var to do some findBy search
         Rectangle rectangle = rectangleRepo.findByName(name);   // find rectangle has matching name
-        if (rectangle != null)      // avoid NullPointerException if rec DNE
-            rectangleRepo.delete(rectangle);       // delete from DB
+        rectangleRepo.delete(rectangle);       // delete from DB
+        // no need to add to model unless there is the deleted rec needs to be shown on the page
         return "redirect:/";    // not return "mainPage";
         // NOTE: redirect to a path (or URL) not a file => redirect:addRec => False (but should be "redirect:/rec/add" instead)
         // HTTP Redirect: This sends a 302 HTTP response to the client, instructing the browser to make a new GET request to the root URL ("/").
@@ -168,5 +167,50 @@ public class RectangleController {
         // returning "redirect:/" ensures the browser's URL is updated and the main page is requested afresh
 
     }
-    
+
+
+    // Update rec from detail displayed page
+    @PostMapping("/rec/update/{name}")
+    public String updateRec(@PathVariable String name, @RequestParam Map<String, String> getRec, Model model) {
+
+        String newWidthStr = getRec.get("newWidth");
+        String newHeightStr = getRec.get("newHeight");
+        String newColor = getRec.get("newColor");
+
+        // Get the existing rectangle from repository (Ofc it must exist)
+        Rectangle rectangle = rectangleRepo.findByName(name);
+        
+        if (newWidthStr == null || newHeightStr == null || newWidthStr.isEmpty() || newHeightStr.isEmpty()) {
+            model.addAttribute("error", "Input fields must be filled");
+            model.addAttribute("rec", rectangle);      // add to model to be shown in showRec
+            return "showRec";
+        }
+
+        // Validate and parse newWidth and newHeight
+        int newWidth = Integer.parseInt(newWidthStr);
+        int newHeight = Integer.parseInt(newHeightStr);
+
+        // Check if newWidth or newHeight are less than or equal to 0
+        if (newWidth <= 0 || newHeight <= 0) {
+            model.addAttribute("error", "Numbers must be positive");
+            model.addAttribute("rec", rectangle);       // add to model to be shown in showRec
+            return "showRec";
+        }
+
+        // Update and rectangle attributes to DB
+        rectangle.setWidth(newWidth);
+        rectangle.setHeight(newHeight);
+        rectangle.setColor(newColor);
+        rectangleRepo.save(rectangle);
+
+        // Add success message to model
+        model.addAttribute("success", "Rectangle updated successfully");
+
+        // Always add the rectangle to model to display in showRec.html
+        model.addAttribute("rec", rectangle);
+        
+        // Return the showRec view to display the updated rectangle details and messages
+        return "showRec";
+    }
+
 }
