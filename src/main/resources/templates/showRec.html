@@ -84,18 +84,17 @@
 </head>
 <body>
     <p th:text="'Rectangle ' + ${rec.name}"></p>
-    <form action="/return" method="get">      <!-- navigate to the mainPage (ie path "/") -->
+    <form action="/" method="get">      <!-- navigate to the mainPage (ie path "/") -->
         <button th:text="Return" class="return-btn"></button>
     </form>
     <div class="outer-div">
         <div class="rec-name" th:style="'background-color: ' + ${rec.color} + '; width: ' + ${rec.width} + 'px; height: ' + ${rec.height} + 'px'"></div>
         <!-- dynamically style the box based on rectangle color using th:style -->
-        <form action="/update" method="post">
+        <form th:action="@{'/rec/update/' + ${rec.name}}" method="post">
             <table>
                 <tr>
                     <td th:text="Name" class="attr-col"></td>
                     <td th:text="${rec.name}"></td>
-                    <input type="hidden" name="name" th:value="${rec.name}">
                 </tr>
 
                 <tr>
@@ -121,12 +120,8 @@
             </table>
             <button type="submit" class="update-btn" th:text="Update"></button>
         </form>
-        <div th:if="${error1}" class="message">
-            <span th:text="${error1}"></span>
-        </div>
-
-        <div th:if="${error2}" class="message">
-            <span th:text="${error2}"></span>
+        <div th:if="${error}" class="message">
+            <span th:text="${error}"></span>
         </div>
 
         <div th:if="${success}" class="success">

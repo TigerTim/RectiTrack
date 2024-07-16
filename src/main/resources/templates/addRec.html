@@ -29,7 +29,7 @@
     </style>
 </head>
 <body>
-    <form action="/return" method="get">      <!-- navigate to the mainPage (ie path "/") -->
+    <form action="/" method="get">      <!-- navigate to the mainPage (ie path "/") -->
         <button th:text="Return" class="return-btn"></button>
     </form>
     <div class="container-fluid">
@@ -73,7 +73,7 @@
                     <span th:text="${error1}"></span>      <!-- call the attribute added in model obj in RectangleController to display value -->
                     <span th:text="${error2}"></span>
                     <span th:text="${error3}"></span>
-                    <span style="color: lightgreen; font-size: 25px;" th:text="${success}"></span>
+                    <span style="color: lightgreen; font-size: 25px;" th:text="${successMessage}"></span>
                 </div>
             </div>
 

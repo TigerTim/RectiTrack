@@ -32,7 +32,7 @@
                 <td></td>
             </tr>
 
-            <tr th:each="rec, iter:${rectangles}">
+            <tr th:each="rectangle, iter:${rec}">
                 <td class="first-col" th:text="${iter.index + 1}"></td>
 
                 <td>
@@ -44,24 +44,16 @@
                     (if want to, style the "form" tag to look like a hyperlink and apply POST method) -->
 
                     <!-- USING <form> tag -->
-                    <!-- <form th:action="@{'/view/' + ${rec.name}}" method="get" stlye="display: inline;">
-                        <button type="submit" class="name_delete-btn" th:text="${rec.name}"></button>
-                    </form> -->
-                    <form action="/view" method="get" style="display:inline;">
-                        <button class="name_delete-btn" th:text="${rec.name}"></button>
-                        <input type="hidden" name="name" th:value="${rec.name}">
+                    <form th:action="@{'/view/' + ${rectangle.name}}" method="get" stlye="display: inline;">
+                        <button type="submit" class="name_delete-btn" th:text="${rectangle.name}"></button>
                     </form>
                 </td>
 
-                <td th:text="${rec.color}"></td>
+                <td th:text="${rectangle.color}"></td>
                 
                 <td>
-                    <!-- <form th:action="@{'/rec/delete/' + ${rec.name}}" method="post" style="display: inline;">
+                    <form th:action="@{'/rec/delete/' + ${rectangle.name}}" method="post" style="display: inline;">
                         <button type="submit" class="name_delete-btn" th:text="Delete"></button>
-                    </form> -->
-                    <form action="/delete" method="post" style="display: inline;">
-                        <button class="name_delete-btn" th:text="Delete"></button>
-                        <input type="hidden" name="name" th:value="${rec.name}">
                     </form>
                 </td>
             </tr>
