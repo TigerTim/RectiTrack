@@ -177,7 +177,7 @@ public class RectangleController {
         String newHeightStr = getRec.get("newHeight");
         String newColor = getRec.get("newColor");
 
-        // Get the existing rectangle from repository (Ofc it must exist)
+        // Get the existing rectangle from repository 
         Rectangle rectangle = rectangleRepo.findByName(name);
         
         if (newWidthStr == null || newHeightStr == null || newWidthStr.isEmpty() || newHeightStr.isEmpty()) {
