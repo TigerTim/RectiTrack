@@ -178,7 +178,7 @@ public class RectangleController {
         String newColor = getRec.get("newColor");
 
         // Get the existing rectangle from repository 
-        Rectangle rectangle = rectangleRepo.findByName(name);   // no need to check if rectangle exists b/c it must exist so that I can delete 
+        Rectangle rectangle = rectangleRepo.findByName(name);
         
         if (newWidthStr == null || newHeightStr == null || newWidthStr.isEmpty() || newHeightStr.isEmpty()) {
             model.addAttribute("error", "Input fields must be filled");
