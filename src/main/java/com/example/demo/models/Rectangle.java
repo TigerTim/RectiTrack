@@ -3,7 +3,7 @@ package com.example.demo.models;
 import jakarta.persistence.*;   // * means for all
 
 @Entity
-@Table(name="rectangle")
+@Table(name="rectangles")
 public class Rectangle {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
